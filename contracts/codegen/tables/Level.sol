@@ -6,19 +6,19 @@ pragma solidity ^0.8.20;
 //   valueSchema: {
 //     hp: "uint128",
 //     mp: "uint128",
-//     at: "uint256",
+//     at: "uint128",
 //     skill: "address",
 //   }
 // },
 
-import {console2} from "forge-std/Test.sol";
+// import {console2} from "forge-std/Test.sol";
 
 bytes32 constant LevelTableId = bytes32(abi.encodePacked(bytes16(""), bytes16("Level")));
 
 struct LevelStruct {
   uint128 hp;
   uint128 mp;
-  uint256 at;
+  uint128 at;
   address skill;
 }
 
@@ -30,15 +30,16 @@ library Level {
     }
   }
 
-  function getLevel() internal view returns (LevelStruct memory) {
-    return StorageSlot();
+  function setLevel(LevelStruct memory _value) internal returns (LevelStruct memory) {
+    LevelStruct storage levelStorage = StorageSlot();
+    levelStorage.hp = _value.hp;
+    levelStorage.mp = _value.mp;
+    levelStorage.at = _value.at;
+    levelStorage.skill = _value.skill;
+    return levelStorage;
   }
 
-  function setLevel(LevelStruct memory _value) internal {
-    LevelStruct storage testState = StorageSlot();
-    testState.hp = _value.hp;
-    testState.mp = _value.mp;
-    testState.at = _value.at;
-    testState.skill = _value.skill;
+  function getLevel() internal pure returns (LevelStruct memory) {
+    return StorageSlot();
   }
 }

@@ -2,8 +2,8 @@
 pragma solidity 0.8.20;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {Level, LevelStruct} from "../contracts/tables/Level.sol";
-import {Proxy} from "../contracts/core/Proxy.sol";
+import {Level, LevelStruct} from "../contracts/codegen/tables/Level.sol";
+import {World} from "../contracts/codegen/World.sol";
 import {LevelSystem} from "../contracts/systems/LevelSystem.sol";
 
 interface ILevelSystem {
@@ -17,7 +17,7 @@ contract LevelSystemTest is Test {
   address bob = vm.addr(2);
   address carol = vm.addr(3);
   address david = vm.addr(4);
-  Proxy proxy;
+  World proxy;
   LevelSystem levelSystem;
 
   function setUp() public {
@@ -25,10 +25,9 @@ contract LevelSystemTest is Test {
     vm.label(bob, "bob");
     vm.label(carol, "carol");
     vm.label(david, "david");
-    proxy = new Proxy();
+    proxy = new World();
     levelSystem = new LevelSystem();
     proxy.setFunctions(levelSystem.setLevel.selector, address(levelSystem));
-    proxy.setFunctions(levelSystem.getLevel.selector, address(levelSystem));
   }
 
   function test_setLevel_Success() public {

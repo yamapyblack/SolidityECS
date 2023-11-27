@@ -5,7 +5,7 @@ import "hardhat/console.sol";
 
 error FunctionNotFound(bytes4 functionSelector);
 
-contract Proxy {
+abstract contract Proxy {
   /**
    * @notice Raised when the World is calling itself via an external call.
    * @param functionSelector The function selector of the disallowed callback.
