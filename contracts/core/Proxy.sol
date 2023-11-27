@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
-import {Store} from "./Store.sol";
 import "hardhat/console.sol";
 
 error FunctionNotFound(bytes4 functionSelector);
 
-contract Proxy is Store {
+contract Proxy {
   /**
    * @notice Raised when the World is calling itself via an external call.
    * @param functionSelector The function selector of the disallowed callback.
@@ -23,6 +22,17 @@ contract Proxy is Store {
     _;
   }
 
+  //function selector to system address
+  mapping(bytes4 => address) functions;
+
+  function setFunctions(bytes4 _finctionSelectp, address _system) public {
+    functions[_finctionSelectp] = _system;
+  }
+
+  function getFunctions(bytes4 _finctionSelectp) public view returns (address) {
+    return functions[_finctionSelectp];
+  }
+
   /**
    * @notice Accepts ETH and adds to the root namespace's balance.
    */
@@ -33,7 +43,6 @@ contract Proxy is Store {
   fallback() external payable requireNoCallback {
     // get facet from function selector
     address system = getFunctions(msg.sig);
-    console.log("msg.sig");
     console.logBytes4(msg.sig);
     if (system == address(0)) {
       revert FunctionNotFound(msg.sig);
